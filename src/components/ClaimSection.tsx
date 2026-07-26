@@ -30,16 +30,16 @@ export const ClaimSection: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto' }}>
-      <div className="glass-card">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{ background: 'rgba(16, 185, 129, 0.2)', padding: '0.6rem', borderRadius: '12px' }}>
-            <Award size={26} color="#10b981" />
+    <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+      <div className="card">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+          <div style={{ background: '#f0fdf4', padding: '0.6rem', borderRadius: '12px', color: '#059669' }}>
+            <Award size={24} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Claim & Redeem Warranty</h2>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-              Executes claim circuit on Midnight ledger. Marks warranty as redeemed while keeping purchaser details private.
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Claim & Redeem Warranty</h2>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              Redeem service on the Midnight ledger. Updates redeemed count without broadcasting purchaser details.
             </p>
           </div>
         </div>
@@ -47,8 +47,8 @@ export const ClaimSection: React.FC = () => {
         <form onSubmit={handleClaim}>
           <div className="form-group">
             <label className="form-label">
-              <span>Product ID</span>
-              <span className="label-badge-public">Public Ledger Target</span>
+              <span>Product Identifier</span>
+              <span className="badge-public">Public Ledger</span>
             </label>
             <input
               type="text"
@@ -63,7 +63,7 @@ export const ClaimSection: React.FC = () => {
             <div className="form-group">
               <label className="form-label">
                 <span>Serial Number</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -77,7 +77,7 @@ export const ClaimSection: React.FC = () => {
             <div className="form-group">
               <label className="form-label">
                 <span>Invoice Number</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -90,8 +90,8 @@ export const ClaimSection: React.FC = () => {
 
             <div className="form-group">
               <label className="form-label">
-                <span>Warranty Secret</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span>Warranty Secret Key</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -105,7 +105,7 @@ export const ClaimSection: React.FC = () => {
             <div className="form-group">
               <label className="form-label">
                 <span>Customer Email</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -118,9 +118,9 @@ export const ClaimSection: React.FC = () => {
 
           <button
             type="submit"
-            className="btn-primary"
+            className="btn-emerald"
             disabled={loading}
-            style={{ width: '100%', marginTop: '1rem', padding: '0.9rem' }}
+            style={{ width: '100%', marginTop: '0.8rem', padding: '0.85rem' }}
           >
             {loading ? 'Executing Claim Circuit...' : 'Submit Claim Privately'}
           </button>
@@ -128,8 +128,8 @@ export const ClaimSection: React.FC = () => {
 
         {result && (
           <div className={`result-banner ${result.success ? 'valid' : 'invalid'}`}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', fontSize: '1.2rem', fontWeight: 700 }}>
-              {result.success ? <CheckCircle2 size={24} color="#10b981" /> : <AlertCircle size={24} color="#f43f5e" />}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 700, fontSize: '1.1rem' }}>
+              {result.success ? <CheckCircle2 size={22} color="#059669" /> : <AlertCircle size={22} color="#dc2626" />}
               <span>{result.message}</span>
             </div>
           </div>

@@ -9,7 +9,7 @@ export const VerifySection: React.FC = () => {
   const [warrantySecret, setWarrantySecret] = useState('secret-key-alice-777');
   const [customerIdentity, setCustomerIdentity] = useState('alice@example.com');
 
-  const [loading, setLoading] = useState(false);
+  const [verifyingStep, setVerifyingStep] = useState<number>(0); // 0: Idle, 1: Construct Witness, 2: Execute Compact Circuit, 3: Completed
   const [verificationResult, setVerificationResult] = useState<{
     tested: boolean;
     isValid: boolean;
@@ -19,45 +19,71 @@ export const VerifySection: React.FC = () => {
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setVerificationResult(null);
 
-    const res = await midnightService.verifyWarranty(
-      productId,
-      serialNumber,
-      invoiceNumber,
-      warrantySecret,
-      customerIdentity
-    );
+    setVerifyingStep(1);
 
-    setLoading(false);
-    setVerificationResult({
-      tested: true,
-      isValid: res.isValid,
-      commitmentHash: res.commitmentHash,
-      message: res.message
-    });
+    setTimeout(async () => {
+      setVerifyingStep(2);
+
+      setTimeout(async () => {
+        const res = await midnightService.verifyWarranty(
+          productId,
+          serialNumber,
+          invoiceNumber,
+          warrantySecret,
+          customerIdentity
+        );
+
+        setVerifyingStep(3);
+        setVerificationResult({
+          tested: true,
+          isValid: res.isValid,
+          commitmentHash: res.commitmentHash,
+          message: res.message
+        });
+      }, 700);
+    }, 600);
   };
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto' }}>
-      <div className="glass-card">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{ background: 'rgba(59, 130, 246, 0.2)', padding: '0.6rem', borderRadius: '12px' }}>
-            <Lock size={26} color="#3b82f6" />
+    <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+      <div className="card">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+          <div style={{ background: '#f1f5f9', padding: '0.6rem', borderRadius: '12px', color: '#0f172a' }}>
+            <Lock size={24} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Confidential Warranty Verification</h2>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-              Customer tool: Prove you own a valid warranty without revealing your receipt, identity, or serial number.
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Confidential Warranty Verification</h2>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              Client-side ZK proof execution. Submit private witness credentials to generate proof off-chain.
             </p>
+          </div>
+        </div>
+
+        {/* ZK Step Progress Bar */}
+        <div className="zk-steps-bar">
+          <div className={`zk-step-item ${verifyingStep >= 1 ? (verifyingStep > 1 ? 'completed' : 'active') : ''}`}>
+            <div className="zk-step-icon">1</div>
+            <div className="zk-step-label">Private Witness</div>
+          </div>
+          <div style={{ flex: 1, height: '2px', background: verifyingStep >= 2 ? 'var(--accent-emerald)' : '#e2e8f0', margin: '0 0.5rem' }} />
+          <div className={`zk-step-item ${verifyingStep >= 2 ? (verifyingStep > 2 ? 'completed' : 'active') : ''}`}>
+            <div className="zk-step-icon">2</div>
+            <div className="zk-step-label">Compact Circuit</div>
+          </div>
+          <div style={{ flex: 1, height: '2px', background: verifyingStep >= 3 ? 'var(--accent-emerald)' : '#e2e8f0', margin: '0 0.5rem' }} />
+          <div className={`zk-step-item ${verifyingStep === 3 ? 'completed' : ''}`}>
+            <div className="zk-step-icon">3</div>
+            <div className="zk-step-label">Disclosed Result</div>
           </div>
         </div>
 
         <form onSubmit={handleVerify}>
           <div className="form-group">
             <label className="form-label">
-              <span>Product ID</span>
-              <span className="label-badge-public">Public Ledger Target</span>
+              <span>Product Identifier</span>
+              <span className="badge-public">Public Ledger Target</span>
             </label>
             <input
               type="text"
@@ -71,8 +97,8 @@ export const VerifySection: React.FC = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
             <div className="form-group">
               <label className="form-label">
-                <span>Product Serial Number</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span>Serial Number</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -86,7 +112,7 @@ export const VerifySection: React.FC = () => {
             <div className="form-group">
               <label className="form-label">
                 <span>Invoice Number</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -99,8 +125,8 @@ export const VerifySection: React.FC = () => {
 
             <div className="form-group">
               <label className="form-label">
-                <span>Warranty Secret / Code</span>
-                <span className="label-badge-private">Private Secret</span>
+                <span>Warranty Secret Key</span>
+                <span className="badge-private">Private Secret</span>
               </label>
               <input
                 type="text"
@@ -114,7 +140,7 @@ export const VerifySection: React.FC = () => {
             <div className="form-group">
               <label className="form-label">
                 <span>Customer Email (Optional Salt)</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -128,37 +154,40 @@ export const VerifySection: React.FC = () => {
           <button
             type="submit"
             className="btn-primary"
-            disabled={loading}
-            style={{ width: '100%', marginTop: '1rem', padding: '0.9rem' }}
+            disabled={verifyingStep === 1 || verifyingStep === 2}
+            style={{ width: '100%', marginTop: '0.8rem', padding: '0.85rem' }}
           >
-            {loading ? (
-              <span>Generating Zero-Knowledge Proof...</span>
+            {verifyingStep === 1 || verifyingStep === 2 ? (
+              <span>Executing Compact ZK Circuit...</span>
             ) : (
               <>
-                <Cpu size={18} /> Generate ZK Proof & Verify Warranty
+                <Cpu size={18} /> Generate ZK Proof & Verify
               </>
             )}
           </button>
         </form>
 
-        {/* Result Banner */}
+        {/* Verification Result Card */}
         {verificationResult && (
           <div className={`result-banner ${verificationResult.isValid ? 'valid' : 'invalid'}`}>
-            <div className="result-icon">
+            <div style={{ marginBottom: '0.75rem' }}>
               {verificationResult.isValid ? (
-                <CheckCircle2 size={64} color="#10b981" />
+                <CheckCircle2 size={56} color="#059669" style={{ margin: '0 auto' }} />
               ) : (
-                <XCircle size={64} color="#f43f5e" />
+                <XCircle size={56} color="#dc2626" style={{ margin: '0 auto' }} />
               )}
             </div>
-            <h3 className="result-title">
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.4rem' }}>
               {verificationResult.isValid ? '✅ Warranty Valid' : '❌ Invalid Warranty'}
             </h3>
-            <p className="result-desc">{verificationResult.message}</p>
+            <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
+              {verificationResult.message}
+            </p>
 
             <div
               style={{
-                background: 'rgba(0,0,0,0.3)',
+                background: '#ffffff',
+                border: '1px solid var(--border-light)',
                 padding: '1rem',
                 borderRadius: '12px',
                 textAlign: 'left',
@@ -166,11 +195,13 @@ export const VerifySection: React.FC = () => {
                 fontFamily: 'var(--font-mono)'
               }}
             >
-              <div style={{ color: '#94a3b8', marginBottom: '0.3rem' }}>Disclosed Midnight Public State:</div>
-              <div style={{ color: verificationResult.isValid ? '#34d399' : '#f87171', fontWeight: 700 }}>
-                Verification Disclosed Output = {verificationResult.isValid ? 'true' : 'false'}
+              <div style={{ color: 'var(--text-muted)', marginBottom: '0.2rem', fontWeight: 600 }}>
+                Compact Circuit Output:
               </div>
-              <div style={{ color: '#64748b', marginTop: '0.3rem' }}>
+              <div style={{ color: verificationResult.isValid ? '#059669' : '#dc2626', fontWeight: 700 }}>
+                disclose(isValid) = {verificationResult.isValid ? 'true' : 'false'}
+              </div>
+              <div style={{ color: 'var(--text-muted)', marginTop: '0.3rem', wordBreak: 'break-all' }}>
                 Commitment: {verificationResult.commitmentHash}
               </div>
             </div>

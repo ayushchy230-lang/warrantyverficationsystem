@@ -43,27 +43,26 @@ export const RegisterSection: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: '780px', margin: '0 auto' }}>
-      <div className="glass-card">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{ background: 'rgba(139, 92, 246, 0.2)', padding: '0.6rem', borderRadius: '12px' }}>
-            <ShieldCheck size={26} color="#8b5cf6" />
+    <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+      <div className="card">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+          <div style={{ background: '#f1f5f9', padding: '0.6rem', borderRadius: '12px', color: '#0f172a' }}>
+            <ShieldCheck size={24} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Register Product Warranty</h2>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-              Manufacturer tool: Issue a confidential warranty. Public state updates, sensitive details remain local.
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Register Product Warranty</h2>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              Manufacturer portal: Issue a confidential warranty. Public ledger updates while witness remains local.
             </p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-            {/* Public Inputs */}
             <div className="form-group">
               <label className="form-label">
-                <span>Product ID</span>
-                <span className="label-badge-public">Public Ledger</span>
+                <span>Product Identifier</span>
+                <span className="badge-public">Public State</span>
               </label>
               <input
                 type="text"
@@ -71,14 +70,14 @@ export const RegisterSection: React.FC = () => {
                 value={productId}
                 onChange={(e) => setProductId(e.target.value)}
                 required
-                placeholder="e.g. PROD-LAPTOP-X1"
+                placeholder="PROD-LAPTOP-X1"
               />
             </div>
 
             <div className="form-group">
               <label className="form-label">
-                <span>Warranty Duration (Days)</span>
-                <span className="label-badge-public">Public Ledger</span>
+                <span>Duration (Days)</span>
+                <span className="badge-public">Public State</span>
               </label>
               <input
                 type="number"
@@ -91,19 +90,17 @@ export const RegisterSection: React.FC = () => {
             </div>
           </div>
 
-          <hr style={{ border: 'none', borderTop: 'var(--glass-border)', margin: '1.5rem 0' }} />
+          <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)', margin: '1.25rem 0' }} />
 
-          <div style={{ marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#c084fc', fontWeight: 600, fontSize: '0.95rem' }}>
-              <Lock size={16} /> Private Witness Data (Never Exposed On-Chain)
-            </div>
+          <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#dc2626', fontWeight: 600, fontSize: '0.88rem' }}>
+            <Lock size={15} /> Private Witness Data (Remains Client-Side)
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
             <div className="form-group">
               <label className="form-label">
-                <span>Customer Identity / Email</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span>Customer Email</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -118,7 +115,7 @@ export const RegisterSection: React.FC = () => {
             <div className="form-group">
               <label className="form-label">
                 <span>Invoice Number</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -133,7 +130,7 @@ export const RegisterSection: React.FC = () => {
             <div className="form-group">
               <label className="form-label">
                 <span>Product Serial Number</span>
-                <span className="label-badge-private">Private Witness</span>
+                <span className="badge-private">Private Witness</span>
               </label>
               <input
                 type="text"
@@ -148,9 +145,9 @@ export const RegisterSection: React.FC = () => {
             <div className="form-group">
               <label className="form-label">
                 <span>Warranty Secret Code</span>
-                <span className="label-badge-private">Private Secret</span>
+                <span className="badge-private">Private Secret</span>
               </label>
-              <div className="input-with-button">
+              <div className="input-row">
                 <input
                   type="text"
                   className="form-input"
@@ -163,9 +160,9 @@ export const RegisterSection: React.FC = () => {
                   className="btn-secondary"
                   onClick={handleGenerateSecret}
                   title="Generate Random Secret"
-                  style={{ padding: '0.85rem 1rem' }}
+                  style={{ padding: '0.8rem' }}
                 >
-                  <RefreshCw size={16} />
+                  <RefreshCw size={15} />
                 </button>
               </div>
             </div>
@@ -175,30 +172,27 @@ export const RegisterSection: React.FC = () => {
             type="submit"
             className="btn-primary"
             disabled={loading}
-            style={{ width: '100%', marginTop: '1.5rem', padding: '0.9rem' }}
+            style={{ width: '100%', marginTop: '1.25rem', padding: '0.85rem' }}
           >
             {loading ? (
-              <span>Registering on Midnight...</span>
+              <span>Registering on Midnight Ledger...</span>
             ) : (
               <>
-                <Sparkles size={18} /> Register Warranty Commitment
+                <Sparkles size={16} /> Register Warranty Commitment
               </>
             )}
           </button>
         </form>
 
         {result && (
-          <div
-            className={`result-banner ${result.success ? 'valid' : 'invalid'}`}
-            style={{ marginTop: '2rem', padding: '1.5rem' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', fontSize: '1.2rem', fontWeight: 700 }}>
-              <CheckCircle size={22} color="#10b981" />
+          <div className={`result-banner ${result.success ? 'valid' : 'invalid'}`}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 700, fontSize: '1.1rem' }}>
+              <CheckCircle size={22} color="#059669" />
               <span>{result.message}</span>
             </div>
-            <div style={{ marginTop: '0.8rem', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-              On-Chain ZK Commitment Hash: <br />
-              <span style={{ color: 'var(--accent-cyan)', wordBreak: 'break-all' }}>{result.commitmentHash}</span>
+            <div style={{ marginTop: '0.6rem', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              On-Chain ZK Commitment: <br />
+              <span style={{ color: '#0f172a', fontWeight: 600, wordBreak: 'break-all' }}>{result.commitmentHash}</span>
             </div>
           </div>
         )}

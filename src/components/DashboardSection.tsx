@@ -23,60 +23,54 @@ export const DashboardSection: React.FC = () => {
       {/* Stat Cards Grid */}
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa' }}>
-            <ShieldCheck size={28} />
+          <div className="stat-icon-wrapper" style={{ background: '#eff6ff', color: '#2563eb' }}>
+            <ShieldCheck size={26} />
           </div>
           <div>
-            <div className="stat-lbl">Total Issued Warranties</div>
-            <div className="stat-val" style={{ color: '#60a5fa' }}>
-              {stats.issuedCount}
-            </div>
+            <div className="stat-label">Total Issued Warranties</div>
+            <div className="stat-value">{stats.issuedCount}</div>
           </div>
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399' }}>
-            <Award size={28} />
+          <div className="stat-icon-wrapper" style={{ background: '#f0fdf4', color: '#059669' }}>
+            <Award size={26} />
           </div>
           <div>
-            <div className="stat-lbl">Total Redeemed</div>
-            <div className="stat-val" style={{ color: '#34d399' }}>
-              {stats.redeemedCount}
-            </div>
+            <div className="stat-label">Total Redeemed</div>
+            <div className="stat-value">{stats.redeemedCount}</div>
           </div>
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon" style={{ background: 'rgba(139, 92, 246, 0.15)', color: '#c084fc' }}>
-            <Shield size={28} />
+          <div className="stat-icon-wrapper" style={{ background: '#fef3c7', color: '#d97706' }}>
+            <Shield size={26} />
           </div>
           <div>
-            <div className="stat-lbl">Active Warranties</div>
-            <div className="stat-val" style={{ color: '#c084fc' }}>
-              {stats.activeCount}
-            </div>
+            <div className="stat-label">Active Warranties</div>
+            <div className="stat-value">{stats.activeCount}</div>
           </div>
         </div>
       </div>
 
-      {/* Verification Audit Log (Zero Personal Data Displayed) */}
-      <div className="glass-card">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <List size={22} color="#8b5cf6" />
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 700 }}>Midnight Public Ledger Transaction Log</h3>
+      {/* Verification Audit Log Table */}
+      <div className="card">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <List size={22} color="#0f172a" />
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>Public Ledger Transaction Ticker</h3>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem', color: '#c084fc', background: 'rgba(139,92,246,0.1)', padding: '0.3rem 0.7rem', borderRadius: '14px' }}>
-            <EyeOff size={14} /> Zero Personal Data Displayed
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: '#059669', background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '0.25rem 0.65rem', borderRadius: '12px', fontWeight: 600 }}>
+            <EyeOff size={13} /> Zero Personal Data Displayed
           </div>
         </div>
 
         <div style={{ overflowX: 'auto' }}>
-          <table className="log-table">
+          <table className="data-table">
             <thead>
               <tr>
                 <th>Timestamp</th>
-                <th>Product ID</th>
+                <th>Product Identifier</th>
                 <th>Action</th>
                 <th>Commitment Hash</th>
                 <th>Disclosed ZK Output</th>
@@ -86,41 +80,52 @@ export const DashboardSection: React.FC = () => {
               {logs.length === 0 ? (
                 <tr>
                   <td colSpan={5} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
-                    No public transactions recorded yet.
+                    No public transactions recorded on ledger yet.
                   </td>
                 </tr>
               ) : (
                 logs.map((item) => (
                   <tr key={item.id}>
-                    <td>{formatTimestamp(item.timestamp)}</td>
-                    <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.productId}</td>
+                    <td style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>{formatTimestamp(item.timestamp)}</td>
+                    <td style={{ fontWeight: 700, color: '#0f172a' }}>{item.productId}</td>
                     <td>
                       <span
                         style={{
                           fontWeight: 700,
-                          fontSize: '0.75rem',
+                          fontSize: '0.72rem',
                           padding: '0.2rem 0.5rem',
-                          borderRadius: '8px',
+                          borderRadius: '6px',
                           background:
                             item.action === 'REGISTER'
-                              ? 'rgba(59, 130, 246, 0.15)'
+                              ? '#eff6ff'
                               : item.action === 'VERIFY'
-                              ? 'rgba(139, 92, 246, 0.15)'
-                              : 'rgba(16, 185, 129, 0.15)',
+                              ? '#f1f5f9'
+                              : '#f0fdf4',
                           color:
                             item.action === 'REGISTER'
-                              ? '#60a5fa'
+                              ? '#2563eb'
                               : item.action === 'VERIFY'
-                              ? '#c084fc'
-                              : '#34d399'
+                              ? '#0f172a'
+                              : '#059669'
                         }}
                       >
                         {item.action}
                       </span>
                     </td>
-                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>{item.commitmentHash}</td>
+                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                      {item.commitmentHash}
+                    </td>
                     <td>
-                      <span className={`status-tag ${item.status === 'SUCCESS' ? 'success' : 'failed'}`}>
+                      <span
+                        style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          color: item.status === 'SUCCESS' ? '#059669' : '#dc2626',
+                          background: item.status === 'SUCCESS' ? '#f0fdf4' : '#fef2f2',
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: '10px'
+                        }}
+                      >
                         {item.status === 'SUCCESS' ? '✅ SUCCESS' : '❌ REJECTED'}
                       </span>
                     </td>
