@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Production builds
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Midnight Network & Local State (DO NOT COMMIT SECRETS OR STATE)
+.midnight-state.json
+.midnight-wallet-state
+*.seed
+*.key
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+vitest.log
+
+# IDE & OS files
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
