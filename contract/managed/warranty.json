@@ -1,0 +1,29 @@
+{
+  "contractName": "ConfidentialWarrantyVerification",
+  "compilerVersion": "0.31.1",
+  "language": "Compact",
+  "circuits": [
+    "registerWarranty",
+    "verifyWarranty",
+    "claimWarranty",
+    "getActiveWarranties"
+  ],
+  "publicLedger": {
+    "productId": "Uint<64>",
+    "warrantyIssuer": "Bytes<32>",
+    "defaultDuration": "Uint<64>",
+    "issuedCount": "Uint<64>",
+    "redeemedCount": "Uint<64>",
+    "contractOwner": "Bytes<32>",
+    "registeredCommitments": "Map<Bytes<32>, Uint<64>>",
+    "claimedCommitments": "Map<Bytes<32>, Boolean>"
+  },
+  "witnesses": [
+    "customerIdentity",
+    "invoiceNumber",
+    "serialNumber",
+    "purchaseDate",
+    "warrantySecret",
+    "ownershipProof"
+  ]
+}
