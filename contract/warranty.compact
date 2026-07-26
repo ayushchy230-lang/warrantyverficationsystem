@@ -1,0 +1,84 @@
+// Midnight Compact Smart Contract: Confidential Product Warranty Verification
+// Compatible with Compact Compiler version 0.31.1 and higher
+pragma language_version >= 0.14.0;
+
+import CompactStandardLibrary;
+
+// Public Ledger State (stored on Midnight blockchain)
+export ledger productId: Uint<64>;
+export ledger warrantyIssuer: Bytes<32>;
+export ledger defaultDuration: Uint<64>;
+export ledger issuedCount: Uint<64>;
+export ledger redeemedCount: Uint<64>;
+export ledger contractOwner: Bytes<32>;
+export ledger registeredCommitments: Map<Bytes<32>, Uint<64>>; // CommitmentHash -> ExpiryTimestamp
+export ledger claimedCommitments: Map<Bytes<32>, Boolean>;      // CommitmentHash -> IsClaimed
+
+// Private Witnesses (executed locally on client device, hidden forever)
+witness customerIdentity(): Bytes<32>;
+witness invoiceNumber(): Bytes<32>;
+witness serialNumber(): Bytes<32>;
+witness purchaseDate(): Uint<64>;
+witness warrantySecret(): Bytes<32>;
+witness ownershipProof(): Bytes<32>;
+
+// Circuit: Manufacturer registers warranty commitment
+export circuit registerWarranty(
+  pId: Uint<64>,
+  duration: Uint<64>,
+  commitmentHash: Bytes<32>
+): [] {
+  productId = pId;
+  defaultDuration = duration;
+  
+  const expiryTimestamp: Uint<64> = duration;
+  registeredCommitments.insert(commitmentHash, expiryTimestamp);
+  
+  issuedCount = issuedCount + 1;
+}
+
+// Circuit: Customer proves warranty ownership privately using ZK proof
+// Discloses ONLY the boolean verification result (true/false). Zero purchase details exposed!
+export circuit verifyWarranty(
+  pId: Uint<64>,
+  commitmentHash: Bytes<32>,
+  secretKey: Bytes<32>,
+  currentTimestamp: Uint<64>
+): Boolean {
+  const exists: Boolean = registeredCommitments.member(commitmentHash);
+  
+  if (!exists) {
+    return disclose(false);
+  }
+  
+  const expiry: Uint<64> = registeredCommitments.lookup(commitmentHash);
+  
+  const isNotExpired: Boolean = currentTimestamp <= expiry;
+  const isKeyValid: Boolean = secretKey == warrantySecret();
+  const isValid: Boolean = exists && isNotExpired && isKeyValid;
+  
+  return disclose(isValid);
+}
+
+// Circuit: Customer redeems warranty. Increments public redeemedCount privately.
+export circuit claimWarranty(
+  commitmentHash: Bytes<32>,
+  secretKey: Bytes<32>
+): Boolean {
+  const exists: Boolean = registeredCommitments.member(commitmentHash);
+  const isAlreadyClaimed: Boolean = claimedCommitments.member(commitmentHash);
+  const isKeyValid: Boolean = secretKey == warrantySecret();
+  
+  if (exists && !isAlreadyClaimed && isKeyValid) {
+    claimedCommitments.insert(commitmentHash, true);
+    redeemedCount = redeemedCount + 1;
+    return disclose(true);
+  }
+  
+  return disclose(false);
+}
+
+// Public Getter: Returns active warranties count (issued - redeemed)
+export circuit getActiveWarranties(): Uint<64> {
+  return disclose(issuedCount - redeemedCount);
+}
