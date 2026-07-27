@@ -4,10 +4,12 @@
 ## Youtube link:https://youtu.be/pVFYvaooJho
 ## LIVE PREVIEW:https://warrantyverificationsystem.vercel.app/
 
+[![CI](https://github.com/ayushchy230-lang/midnight01/actions/workflows/ci.yml/badge.svg)](https://github.com/ayushchy230-lang/midnight01/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Midnight](https://img.shields.io/badge/Midnight-ZK%20dApp-1c7a4c)](https://midnight.network)
 [![TypeScript](https://img.shields.io/badge/TypeScript-blue.svg)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-React-646CFF.svg)](https://vitejs.dev)
+[![Level 3](https://img.shields.io/badge/Level-3%20Confidential%20Credentials-8b5cf6)](PROPOSAL.md)
 
 ---
 
@@ -337,6 +339,8 @@ npm run test -w @midnight-ntwrk/bboard-contract
 - [x] Privacy Model section with detailed explanation
 - [x] Product proposal & submission checklist included
 - [x] Polished, accessible UI design
+- [x] `PROPOSAL.md` with full project proposal, ZK protocol design, category classification & architecture
+- [x] Live CI badge in README showing real-time pipeline status
 
 ---
 <img width="1869" height="927" alt="image" src="https://github.com/user-attachments/assets/47033292-31cd-45eb-b432-1a20e7eb0526" />
