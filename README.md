@@ -339,6 +339,10 @@ npm run test -w @midnight-ntwrk/bboard-contract
 - [x] Polished, accessible UI design
 
 ---
+<img width="1869" height="927" alt="image" src="https://github.com/user-attachments/assets/47033292-31cd-45eb-b432-1a20e7eb0526" />
+<img width="1886" height="847" alt="image" src="https://github.com/user-attachments/assets/62d6d43f-a9a9-4dde-a80f-ac96f860bddf" />
+<img width="1901" height="859" alt="image" src="https://github.com/user-attachments/assets/4174ca42-b2b4-4b8c-aaa8-bb85e1a7b9e0" />
+
 
 ## 🤝 Contributing
 
