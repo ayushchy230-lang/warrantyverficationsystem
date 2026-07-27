@@ -1,6 +1,8 @@
 # Confidential Product Warranty Verification dApp 🔒
 
 > A privacy-preserving warranty verification dApp built on **Midnight** using zero-knowledge credentials. Customers can prove they own a valid product warranty without revealing sensitive purchase details, identity, or transaction history.
+## yotube link:https://youtu.be/pVFYvaooJho
+## LIVE PREVIEW:https://warrantyverificationsystem.vercel.app/
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Midnight](https://img.shields.io/badge/Midnight-ZK%20dApp-1c7a4c)](https://midnight.network)
